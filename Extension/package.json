@@ -3381,7 +3381,7 @@
                         "type": "boolean",
                         "default": true,
                         "markdownDescription": "%c_cpp.configuration.persistDevEnvironment.markdownDescription%",
-                        "scope": "resource"
+                        "scope": "window"
                     }
                 }
             }

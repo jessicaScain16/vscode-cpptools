@@ -1565,6 +1565,7 @@ async function showCopilotContent(copilotHoverProvider: CopilotHoverProvider, ho
 async function onSetDevEnvironment(): Promise<void> {
     try {
         await setEnvironment(util.extensionContext);
+        await vscode.commands.executeCommand('setContext', 'cpptools.msvcEnvironmentFound', util.hasMsvcEnvironment());
         void vscode.window.showInformationMessage(`${util.extensionContext?.environmentVariableCollection.description} successfully set.`);
     } catch (error: any) {
         void vscode.window.showErrorMessage(`Developer environment not set: ${error.message}`);
@@ -1573,4 +1574,5 @@ async function onSetDevEnvironment(): Promise<void> {
 
 async function onClearDevEnvironment(): Promise<void> {
     util.extensionContext?.environmentVariableCollection.clear();
+    await vscode.commands.executeCommand('setContext', 'cpptools.msvcEnvironmentFound', util.hasMsvcEnvironment());
 }

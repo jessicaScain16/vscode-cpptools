@@ -194,7 +194,7 @@ response.uri:${copilotCompletionContext.sourceFileUri || "<not-set>"}:${copilotC
             return undefined;
         } finally {
             this.logger.
-                appendLineAtLevel(7, logMessage);
+                appendLineAtLevel(7, `[${new Date().toISOString().replace('T', ' ').replace('Z', '')}] ${logMessage}`);
             telemetry.send("cache");
         }
     }
@@ -355,7 +355,10 @@ response.uri:${copilotCompletionContext.sourceFileUri || "<not-set>"}:${copilotC
         try {
             featureFlag = await this.getEnabledFeatureFlag(context);
             telemetry.addRequestMetadata(context.documentContext.uri, context.documentContext.offset,
-                context.completionId, context.documentContext.languageId, { featureFlag, timeBudgetMs: cppTimeBudgetMs, maxCaretDistance });
+                context.completionId, context.documentContext.languageId, {
+                featureFlag, timeBudgetMs: cppTimeBudgetMs, maxCaretDistance,
+                maxSnippetCount, maxSnippetLength, doAggregateSnippets
+            });
             if (featureFlag === undefined) { return []; }
             const cacheEntry: CacheEntry | undefined = this.completionContextCache.get(docUri.toString());
             const defaultValue = cacheEntry?.[1];
@@ -411,7 +414,7 @@ response.uri:${copilotCompletionContext.sourceFileUri || "<not-set>"}:${copilotC
             telemetry.addResolvedElapsed(duration);
             telemetry.addCacheSize(this.completionContextCache.size);
             telemetry.send();
-            this.logger.appendLineAtLevel(7, logMessage);
+            this.logger.appendLineAtLevel(7, `[${new Date().toISOString().replace('T', ' ').replace('Z', '')}] ${logMessage}`);
         }
     }
 

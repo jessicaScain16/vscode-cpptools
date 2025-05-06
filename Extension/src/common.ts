@@ -1071,8 +1071,13 @@ function extractArgs(argsString: string): string[] {
             const executablePath: string = getExtensionFilePath("bin/cpptools-wordexp");
             const executableDir: string = path.dirname(executablePath);
             process.chdir(executableDir);
+            if (!fs.existsSync(executablePath)) {
+                console.log(`cpptools-wordexp not found at ${executablePath}`);
+            }
+
             const wordexpResult: any = child_process.execFileSync(executablePath, [argsString], { shell: false });
             if (wordexpResult === undefined) {
+                console.log("cpptools-wordexp returned undefined.");
                 return [];
             }
             const jsonText: string = wordexpResult.toString();

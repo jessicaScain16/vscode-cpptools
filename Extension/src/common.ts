@@ -993,6 +993,7 @@ function legacyExtractArgs(argsString: string): string[] {
     return result;
 }
 
+let tryLegacy: boolean = false;
 function extractArgs(argsString: string): string[] {
     argsString = argsString.trim();
     if (os.platform() === 'win32') {
@@ -1082,8 +1083,14 @@ function extractArgs(argsString: string): string[] {
             }
             const jsonText: string = wordexpResult.toString();
             return jsonc.parse(jsonText, undefined, true) as any;
-        } catch {
-            return [];
+        } catch (e: any) {
+            console.log(e.toString());
+            if (tryLegacy) {
+                tryLegacy = false; // only once
+                return legacyExtractArgs(argsString);
+            } else {
+                return [];
+            }
         }
     }
 }

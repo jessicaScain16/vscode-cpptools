@@ -144,7 +144,7 @@ if (isWindows) {
             const c = new Counter();
             argsTests.forEach(test => {
                 const result = extractCompilerPathAndArgs(test[1], test[0], test[2]);
-                equal(result.compilerName, test[3], `${c.str} compilerName should match`);
+                equal(result.compilerName, test[3], `${c.str} compilerName should match\n${JSON.stringify(result, null, 4)}`);
                 deepEqual(result.allCompilerArgs, test[4], `${c.str} allCompilerArgs should match`);
                 equal(result.error, undefined, `${c.str} error should be undefined`);
                 equal(result.telemetry, undefined, `${c.str} telemetry should be undefined`);
@@ -159,7 +159,7 @@ if (isWindows) {
             const c = new Counter();
             negativeTests.forEach(test => {
                 const result = extractCompilerPathAndArgs(test[1], test[0], test[2]);
-                equal(result.compilerName, test[3], `${c.str} compilerName should match`);
+                equal(result.compilerName, test[3], `${c.str} compilerName should match\n${JSON.stringify(result, null, 4)}`);
                 deepEqual(result.allCompilerArgs, test[4], `${c.str} allCompilerArgs should match`);
 
                 // errors and telemetry are set by validateCompilerPath
@@ -211,7 +211,7 @@ describe('validateCompilerPath', () => {
         const c = new Counter();
         argsTests.forEach(test => {
             const result = CppProperties.validateCompilerPath(test[0], test[1]);
-            equal(result.compilerName, test[2], `${c.str} compilerName should match`);
+            equal(result.compilerName, test[2], `${c.str} compilerName should match\n${JSON.stringify(result, null, 4)}`);
             deepEqual(result.allCompilerArgs, test[3], `${c.str} allCompilerArgs should match`);
             equal(result.error, undefined, `${c.str} error should be undefined`);
             deepEqual(result.telemetry, {}, `${c.str} telemetry should be empty`);
@@ -260,7 +260,7 @@ describe('validateCompilerPath', () => {
 
     it('Verify errors with unknown compiler not in Path with args', async () => {
         const result = CppProperties.validateCompilerPath('icc -O2', assetsFolder);
-        equal(result.compilerName, 'icc', 'compilerName should be found');
+        equal(result.compilerName, 'icc', 'compilerName should be found\n' + JSON.stringify(result, null, 4));
         deepEqual(result.allCompilerArgs, ['-O2'], 'args should match');
         ok(result.error?.includes('Cannot find'), 'Should have an error for unknown compiler');
         ok(result.error?.includes('surround the compiler path with double quotes'), 'Should have an error for missing double quotes');
